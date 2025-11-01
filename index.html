@@ -1,154 +1,94 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#021025" />
-  <title>Painel Vital — Calculadora Saúde</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root{
-      --accent: #34d399;
-      --accent-2: #06b6d4;
-      --muted: rgba(230,238,248,0.78);
-      --bg: #021025;
-    }
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-      background:
-        radial-gradient(900px 500px at 10% 10%, rgba(6,182,212,0.06), transparent 10%),
-        radial-gradient(700px 400px at 90% 90%, rgba(52,211,153,0.03), transparent 10%),
-        linear-gradient(180deg,#021025 0%, #06152b 100%);
-      color:#e6eef8;
-      -webkit-font-smoothing:antialiased;
-      box-sizing:border-box;
-      padding-top: calc(env(safe-area-inset-top, 20px) + 36px);
-      padding-bottom: calc(env(safe-area-inset-bottom, 12px) + 12px);
-      padding-left: 16px;
-      padding-right: 16px;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#021025" />
+<title>Painel Vital — Calculadora Saúde</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --accent:#34d399; --accent-2:#06b6d4; --bg:#021025; --muted:rgba(230,238,248,0.78);
+  }
+  html,body{height:100%}
+  body{
+    margin:0; font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    background:
+      radial-gradient(900px 500px at 10% 10%, rgba(6,182,212,0.06), transparent 10%),
+      radial-gradient(700px 400px at 90% 90%, rgba(52,211,153,0.03), transparent 10%),
+      linear-gradient(180deg,#021025 0%, #06152b 100%);
+    color:#e6eef8; -webkit-font-smoothing:antialiased; box-sizing:border-box;
+    padding-top: calc(env(safe-area-inset-top, 20px) + 36px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 12px) + 12px);
+    padding-left: 16px; padding-right: 16px; display:flex; align-items:flex-start; justify-content:center;
+  }
 
-    .wrap{ width:100%; max-width:1100px; margin:0 auto; }
+  .wrap{width:100%; max-width:1100px; margin:0 auto;}
 
-    /* header */
-    .topbar{
-      display:flex; gap:12px; align-items:center;
-      position:sticky; top: calc(env(safe-area-inset-top, 20px) + 8px); z-index:80;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      padding:10px 12px; border-radius:12px; box-shadow:0 10px 30px rgba(2,8,20,0.45);
-      backdrop-filter: blur(6px); margin-bottom:14px;
-    }
-    .logo{ width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center;
-      background: linear-gradient(135deg,var(--accent), var(--accent-2));
-    }
-    .title{ font-weight:800; font-size:1.1rem; }
-    .subtitle{ color:rgba(230,238,248,0.82); font-size:0.86rem; margin-top:2px; }
+  /* header */
+  .topbar{
+    display:flex; gap:12px; align-items:center; position:sticky; top:calc(env(safe-area-inset-top,20px)+8px); z-index:90;
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    padding:10px 12px; border-radius:12px; box-shadow:0 10px 30px rgba(2,8,20,0.45); backdrop-filter:blur(6px); margin-bottom:14px;
+  }
+  .logo{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));}
+  .title{font-weight:800;font-size:1.1rem;}
+  .subtitle{color:rgba(230,238,248,0.82);font-size:0.86rem;margin-top:2px;}
+  .info-btn{margin-left:auto;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);color:#e6eef8;padding:8px 10px;border-radius:10px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(2,8,20,0.3);}
 
-    .info-btn {
-      margin-left:auto;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.04);
-      color: #e6eef8;
-      padding: 8px 10px;
-      border-radius: 10px;
-      font-weight:800;
-      cursor:pointer;
-      box-shadow: 0 6px 18px rgba(2,8,20,0.3);
-    }
+  /* layout */
+  .grid-main{display:grid;grid-template-columns:1fr;gap:16px;align-items:start;}
+  @media(min-width:980px){ .grid-main{grid-template-columns:360px 1fr;} }
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 12px 36px rgba(2,8,20,0.45);backdrop-filter:blur(6px);}
 
-    /* layout */
-    .grid-main{ display:grid; grid-template-columns: 1fr; gap:16px; align-items:start; }
-    @media(min-width:980px){ .grid-main { grid-template-columns: 360px 1fr; } }
+  /* inputs */
+  .input-panel label{display:block;text-align:center;color:var(--muted);margin-bottom:6px;font-size:13px;}
+  .input-panel input{width:100%;padding:14px 12px;border-radius:12px;background:rgba(255,255,255,0.02);color:#e6eef8;border:1px solid rgba(255,255,255,0.06);font-weight:700;font-size:16px;text-align:center;}
+  .input-row{display:flex;gap:10px;}
+  .btn{padding:12px 16px;border-radius:12px;font-weight:800;cursor:pointer;border:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 10px 26px rgba(2,8,20,0.36);}
+  .btn-calc{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#022;}
+  .btn-reset{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);}
 
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:12px; padding:14px; border:1px solid rgba(255,255,255,0.04);
-      box-shadow: 0 12px 36px rgba(2,8,20,0.45); backdrop-filter: blur(6px);
-    }
+  /* results */
+  .result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  @media(max-width:980px){ .result-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:640px){ .result-grid{grid-template-columns:1fr;} }
+  .metric{padding:14px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:8px;background:linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);min-height:110px;transition:transform .22s ease;}
+  .metric:hover{transform:translateY(-6px);}
+  .icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.03);}
+  .label{font-size:13px;color:var(--muted);text-align:center;}
+  .value{font-weight:900;font-size:1.4rem;text-align:center;white-space:nowrap;}
+  .friendly{color:#dff7ea;font-weight:700;font-size:0.95rem;text-align:center;}
+  .lower{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+  @media(max-width:980px){ .lower{grid-template-columns:1fr;} }
+  .note{color:var(--muted);font-size:13px;text-align:center;}
+  .num{white-space:nowrap;font-variant-numeric:tabular-nums;}
 
-    /* inputs centered + custom select base */
-    .input-panel label{ display:block; text-align:center; color:rgba(230,238,248,0.78); margin-bottom:6px; font-size:13px; }
-    .input-panel input{
-      width:100%; padding:14px 12px; border-radius:12px; background: rgba(255,255,255,0.02);
-      color:#e6eef8; border:1px solid rgba(255,255,255,0.06); font-weight:700; font-size:16px; text-align:center;
-    }
+  /* custom selects */
+  .custom-select{position:relative;width:100%;max-width:100%;margin:0 auto;}
+  .custom-trigger{padding:14px 12px;border-radius:12px;background:rgba(255,255,255,0.02);color:#e6eef8;border:1px solid rgba(255,255,255,0.06);font-weight:700;text-align:center;cursor:pointer;}
+  .custom-trigger:after{content:'▾';float:right;opacity:0.9;}
+  .custom-options{position:absolute;left:0;right:0;top:calc(100% + 8px);background:var(--bg);border-radius:10px;box-shadow:0 14px 40px rgba(2,8,20,0.6);max-height:240px;overflow:auto;z-index:9999;border:1px solid rgba(255,255,255,0.04);display:none;}
+  .custom-option{padding:10px 12px;color:#e6eef8;cursor:pointer;}
+  .custom-option:hover,.custom-option[aria-selected="true"]{background:rgba(255,255,255,0.03);}
+  .custom-select.open .custom-options{display:block;}
+  select.native-hidden{display:none !important;}
 
-    .input-row{ display:flex; gap:10px; }
-    .input-row > div{ flex:1; }
+  /* drawer / info menu (side panel) */
+  .drawer-backdrop{position:fixed;inset:0;background:rgba(2,6,15,0.45);display:none;z-index:130;}
+  .drawer-backdrop.open{display:block;}
+  .drawer{position:fixed;right:0;top:0;height:100%;width:360px;max-width:92vw;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:-20px 0 40px rgba(2,8,20,0.6);padding:18px;border-left:1px solid rgba(255,255,255,0.04);transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.9,.3,1);overflow:auto;}
+  .drawer.open{transform:translateX(0);}
+  .drawer h3{margin:0 0 8px 0;font-size:1.05rem;}
+  .drawer .close-drawer{position:absolute;left:12px;top:12px;background:transparent;border:none;color:#e6eef8;font-weight:800;cursor:pointer;}
+  .drawer .tablist{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .drawer .tab{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);cursor:pointer;font-weight:700;}
+  .drawer .tab.active{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#022;}
+  .drawer .content p{margin:8px 0;color:rgba(230,238,248,0.95);line-height:1.35;font-size:0.95rem;}
+  .drawer .bullet{margin-left:14px;margin-bottom:6px;color:rgba(230,238,248,0.95);}
 
-    .btn{ padding:12px 16px; border-radius:12px; font-weight:800; cursor:pointer; border:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 10px 26px rgba(2,8,20,0.36); }
-    .btn-calc{ background: linear-gradient(90deg,var(--accent), var(--accent-2)); color:#022; }
-    .btn-reset{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:rgba(230,238,248,0.78); }
-
-    /* result grid */
-    .result-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:12px; }
-    @media(max-width:980px){ .result-grid{ grid-template-columns: repeat(2,1fr); } }
-    @media(max-width:640px){ .result-grid{ grid-template-columns: 1fr; } }
-
-    .metric{ padding:14px; border-radius:12px; display:flex; flex-direction:column; align-items:center; gap:8px; background: linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03); min-height:110px; transition: transform .22s ease; }
-    .metric:hover{ transform: translateY(-6px); }
-    .icon{ width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; background: rgba(255,255,255,0.03); }
-    .label{ font-size:13px; color:rgba(230,238,248,0.78); text-align:center; }
-    .value{ font-weight:900; font-size:1.4rem; text-align:center; white-space:nowrap; }
-    .friendly{ color:#dff7ea; font-weight:700; font-size:0.95rem; text-align:center; }
-
-    .lower{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
-    @media(max-width:980px){ .lower{ grid-template-columns:1fr; } }
-
-    .note{ color:rgba(230,238,248,0.78); font-size:13px; text-align:center; }
-
-    .num{ white-space:nowrap; font-variant-numeric:tabular-nums; }
-
-    /* ===== custom select styles (dark dropdown) ===== */
-    .custom-select { position:relative; width:100%; max-width:100%; margin:0 auto; }
-    .custom-trigger {
-      padding:14px 12px; border-radius:12px; background: rgba(255,255,255,0.02);
-      color:#e6eef8; border:1px solid rgba(255,255,255,0.06); font-weight:700; text-align:center; cursor:pointer;
-    }
-    .custom-trigger:after { content:'▾'; float:right; opacity:0.9; }
-    .custom-options {
-      position:absolute; left:0; right:0; top:calc(100% + 8px); background: var(--bg); border-radius:10px;
-      box-shadow:0 14px 40px rgba(2,8,20,0.6); max-height:240px; overflow:auto; z-index:9999; border:1px solid rgba(255,255,255,0.04);
-      display:none;
-    }
-    .custom-option { padding:10px 12px; color:#e6eef8; cursor:pointer; }
-    .custom-option:hover, .custom-option[aria-selected="true"]{ background: rgba(255,255,255,0.03); }
-    .custom-select.open .custom-options{ display:block; }
-    select.native-hidden { display:none !important; }
-
-    /* ===== info modal ===== */
-    .modal-backdrop {
-      position:fixed; inset:0; background: rgba(2,6,15,0.6); display:none; align-items:center; justify-content:center; z-index:120;
-      padding:20px;
-    }
-    .modal-backdrop.open { display:flex; }
-    .modal {
-      max-width:900px; width:100%; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:12px; padding:18px; border:1px solid rgba(255,255,255,0.04); box-shadow:0 18px 60px rgba(2,8,20,0.7);
-      max-height:86vh; overflow:auto;
-    }
-    .modal h3 { margin:0 0 6px 0; font-size:1.05rem; }
-    .modal p { margin:6px 0; color: rgba(230,238,248,0.9); line-height:1.35; }
-    .modal .close { position:absolute; right:18px; top:12px; background:transparent; border:none; color:#e6eef8; font-weight:800; cursor:pointer; }
-    .info-short { font-weight:700; color:#dff7ea; margin-bottom:8px; }
-
-    /* small info ? button */
-    .tiny-info {
-      display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px; border-radius:8px;
-      background: rgba(255,255,255,0.03); color:#e6eef8; border:1px solid rgba(255,255,255,0.04); font-weight:800; cursor:pointer;
-    }
-
-    @media (max-width:420px){
-      .modal { padding:12px; }
-      .topbar { padding:8px; }
-    }
-
-  </style>
+  @media(max-width:640px){ .drawer{width:92vw;} .drawer .tab{flex:1 1 48%; text-align:center;} }
+</style>
 </head>
 <body>
   <div class="wrap" role="main">
@@ -164,15 +104,15 @@
         <div class="subtitle">Resultados simples — L, g, kcal</div>
       </div>
 
-      <button id="openInfo" class="info-btn" title="Informações">i</button>
+      <button id="openDrawer" class="info-btn" title="Informações">i</button>
     </header>
 
     <main class="grid-main" role="region" aria-label="Ferramentas e resultados">
       <!-- inputs -->
       <section class="card input-panel" aria-label="Entradas">
-        <div style="text-align:center; margin-bottom:10px;">
-          <div style="font-weight:900; font-size:1.05rem;">Entradas</div>
-          <div class="note">Use valores aproximados — tudo salvo localmente</div>
+        <div style="text-align:center;margin-bottom:10px;">
+          <div style="font-weight:900;font-size:1.05rem;">Entradas</div>
+          <div class="note">Use valores aproximados — salvo localmente</div>
         </div>
 
         <div style="margin-bottom:10px;">
@@ -245,12 +185,12 @@
           </div>
         </div>
 
-        <div style="display:flex; gap:12px; justify-content:center; margin-top:6px;">
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:6px;">
           <button id="calcBtn" class="btn btn-calc" aria-label="Calcular">Calcular</button>
           <button id="resetBtn" class="btn btn-reset" aria-label="Resetar">Reset</button>
         </div>
 
-        <div class="note" style="margin-top:12px;">Feito para leigos: números claros e frases simples.</div>
+        <div class="note" style="margin-top:12px;">Feito para leigos: números claros e frases curtas.</div>
       </section>
 
       <!-- results -->
@@ -286,21 +226,18 @@
 
         <div class="lower" style="margin-top:12px;">
           <div class="card" style="padding:12px;">
-            <div style="display:flex; align-items:center; justify-content:center; gap:8px;">
-              <div style="font-weight:800;">Proteína</div>
-            </div>
-            <div style="text-align:center; font-size:1.3rem; font-weight:800;" id="proteinVal">— g</div>
+            <div style="font-weight:800;text-align:center;">Proteína</div>
+            <div id="proteinVal" style="text-align:center;font-size:1.3rem;font-weight:800;">— g</div>
             <div id="proteinNote" class="note">—</div>
             <div id="proteinFriendly" class="friendly">—</div>
           </div>
 
           <div class="card" style="padding:12px;">
-            <div style="display:flex; align-items:center; justify-content:center; gap:8px;">
+            <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
               <div style="font-weight:800;">Creatina</div>
-              <button id="creaInfo" class="tiny-info" title="O que é isto?">?</button>
+              <button id="creaInfoBtn" class="tiny-info" title="Informação rápida">?</button>
             </div>
-
-            <div style="display:flex; gap:12px; justify-content:center; margin-top:6px;">
+            <div style="display:flex;gap:12px;justify-content:center;margin-top:6px;">
               <div style="text-align:center;">
                 <div id="creaLoad" style="font-weight:800;">— g</div>
                 <div class="note">Carga</div>
@@ -314,193 +251,190 @@
           </div>
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
           <div id="brief" class="note">Clique em Calcular para ver o resumo.</div>
-          <div style="display:flex; gap:8px;">
-            <button id="copyBtn" class="small-btn">Copiar</button>
-            <button id="saveBtn" class="small-btn">Salvar</button>
+          <div style="display:flex;gap:8px;">
+            <button id="copyBtn" class="btn btn-reset" title="Copiar resumo">Copiar</button>
+            <button id="saveBtn" class="btn btn-reset" title="Salvar localmente">Salvar</button>
           </div>
         </div>
       </section>
     </main>
   </div>
 
-  <!-- info modal -->
-  <div id="infoModal" class="modal-backdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
-      <button id="closeInfo" class="close" aria-label="Fechar">✕</button>
-      <h2 id="infoTitle" style="margin-top:0; margin-bottom:8px;">Informações rápidas</h2>
+  <!-- DRAWER: info menu separado em abas curtas -->
+  <div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" role="complementary" aria-label="Menu de informações">
+    <button id="closeDrawer" class="close-drawer" aria-label="Fechar">✕</button>
+    <h3>Informações</h3>
 
-      <section style="margin-bottom:12px;">
-        <h3>Creatina — estratégias e uso</h3>
-        <p class="info-short">Sugestão prática para usuários leigos</p>
-        <p><strong>Carga (opcional):</strong> 0,3 g/kg/dia por 5–7 dias. Por exemplo, quem pesa 70 kg toma ~21 g/dia divididos em 3–4 doses. A finalidade é encher os estoques musculares mais rápido.</p>
-        <p><strong>Manutenção:</strong> 0,03 g/kg/dia (ou ~3 g/dia prático). Depois da carga, reduzir para manutenção. Manutenção mantém os níveis sem necessidade de doses altas.</p>
-        <p><strong>Quando pular a carga?</strong> Se preferir simplicidade, comece direto com a manutenção (3 g/dia). A carga só acelera os resultados, não é obrigatória.</p>
-        <p><strong>Precauções:</strong> beba água suficiente; consulte médico se tiver problemas renais ou uso de medicamentos. Não exceda recomendações sem orientação.</p>
-      </section>
-
-      <section style="margin-bottom:12px;">
-        <h3>Objetivos (Perder / Manter / Ganhar)</h3>
-        <p class="info-short">Como o app ajusta e o que isso significa pra você</p>
-        <p><strong>Perder peso:</strong> o TDEE é reduzido ~300 kcal/dia (segurança mínima de 1100 kcal). Resultado: ingestão abaixo do gasto → perda gradual. Mantenha proteína alta para preservar massa muscular.</p>
-        <p><strong>Manter peso:</strong> usa TDEE direto: calorias estimadas para manter seu peso atual. Ideal se você está satisfeito com seu corpo e quer estabilidade.</p>
-        <p><strong>Ganho de massa:</strong> adiciona ~300 kcal/dia ao TDEE para favorecer superávit calórico — bom para ganhar músculo com treino. Combine com proteína mais alta (estratégia 'ativo' ou 'atleta').</p>
-        <p><strong>Resumo prático:</strong> escolha 'Perder' para déficit, 'Manter' para estabilidade e 'Ganar' para superar o gasto. Ajuste proteína conforme nível de treino.</p>
-      </section>
-
-      <section style="margin-bottom:6px;">
-        <h3>Dicas rápidas de interpretação</h3>
-        <ul style="margin:6px 0 0 18px; color:rgba(230,238,248,0.9);">
-          <li>Água: resultado visto em litros quando grande (ex.: 4 L) — beba ao longo do dia.</li>
-          <li>Proteína: use valor total (g/dia); distribuir em 3–4 refeições facilita atingir meta.</li>
-          <li>Creatina: pode ser tomada com água ou suco; consistência > timing.</li>
-        </ul>
-      </section>
+    <div class="tablist" role="tablist" aria-label="Tópicos">
+      <button class="tab active" data-tab="creatina">Creatina</button>
+      <button class="tab" data-tab="objetivos">Objetivos</button>
+      <button class="tab" data-tab="dicas">Dicas rápidas</button>
     </div>
-  </div>
 
-  <!-- ===== custom select script (integrado) ===== -->
+    <div class="content">
+      <div id="tab-creatina" class="tab-panel" role="tabpanel">
+        <p class="bullet"><strong>• Carga (opcional):</strong> 0,3 g/kg por 5–7 dias. Ex.: 70 kg → ~21 g/dia (dividido).</p>
+        <p class="bullet"><strong>• Manutenção:</strong> ~0,03 g/kg → prático: 3 g/dia.</p>
+        <p class="bullet"><strong>• Quando pular carga:</strong> quer simplicidade → comece direto com 3 g/dia.</p>
+        <p class="bullet"><strong>• Precauções:</strong> beba água; consulte médico se tiver problema renal.</p>
+      </div>
+
+      <div id="tab-objetivos" class="tab-panel" style="display:none">
+        <p class="bullet"><strong>Perder peso:</strong> diminuir ~300 kcal do TDEE (mín. 1100 kcal) → déficit gradual.</p>
+        <p class="bullet"><strong>Manter peso:</strong> usar TDEE estimado → estabilidade.</p>
+        <p class="bullet"><strong>Ganar massa:</strong> somar ~300 kcal ao TDEE → superávit; combine com proteína maior.</p>
+        <p class="bullet"><strong>O que muda na prática:</strong> objetivo altera calorias; mantenha proteína alta ao perder para preservar músculo.</p>
+      </div>
+
+      <div id="tab-dicas" class="tab-panel" style="display:none">
+        <p class="bullet"><strong>• Água:</strong> beba ao longo do dia (ex.: 4 L → distribuir).</p>
+        <p class="bullet"><strong>• Proteína:</strong> dividir em 3–4 refeições facilita atingir meta.</p>
+        <p class="bullet"><strong>• Creatina:</strong> consistência importa mais que horário; tomar com água/suco funciona.</p>
+        <p class="bullet"><strong>• Segurança:</strong> valores são estimativas — se tiver dúvida, procure um profissional.</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- custom select script -->
   <script>
-    // transforma cada .custom-select conectando ao select nativo (mantém select para formulários)
-    (function initCustomSelects(){
-      function $(sel, root=document) { return root.querySelector(sel); }
-      const blocks = Array.from(document.querySelectorAll('.custom-select'));
-      blocks.forEach(block => {
-        const sel = block.querySelector('select');
-        const trigger = block.querySelector('.custom-trigger');
-        const optionsContainer = block.querySelector('.custom-options');
-        // populate options
-        optionsContainer.innerHTML = '';
-        Array.from(sel.options).forEach((opt, idx) => {
-          const d = document.createElement('div');
-          d.className = 'custom-option';
-          d.textContent = opt.textContent;
-          d.dataset.value = opt.value;
-          d.tabIndex = 0;
-          if (sel.selectedIndex === idx) d.setAttribute('aria-selected','true');
-          d.addEventListener('click', () => {
-            sel.value = d.dataset.value;
-            trigger.textContent = d.textContent;
-            optionsContainer.querySelectorAll('.custom-option').forEach(x => x.removeAttribute('aria-selected'));
-            d.setAttribute('aria-selected','true');
-            block.classList.remove('open');
-            // dispatch change
-            sel.dispatchEvent(new Event('change', { bubbles: true }));
-          });
-          d.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); d.click(); }
-          });
-          optionsContainer.appendChild(d);
+  (function initCustomSelects(){
+    const blocks = Array.from(document.querySelectorAll('.custom-select'));
+    blocks.forEach(block => {
+      const sel = block.querySelector('select');
+      const trigger = block.querySelector('.custom-trigger');
+      const optionsContainer = block.querySelector('.custom-options');
+      optionsContainer.innerHTML = '';
+      Array.from(sel.options).forEach((opt, idx) => {
+        const d = document.createElement('div');
+        d.className = 'custom-option';
+        d.textContent = opt.textContent;
+        d.dataset.value = opt.value;
+        d.tabIndex = 0;
+        if (sel.selectedIndex === idx) d.setAttribute('aria-selected','true');
+        d.addEventListener('click', () => {
+          sel.value = d.dataset.value;
+          trigger.textContent = d.textContent;
+          optionsContainer.querySelectorAll('.custom-option').forEach(x => x.removeAttribute('aria-selected'));
+          d.setAttribute('aria-selected','true');
+          block.classList.remove('open');
+          sel.dispatchEvent(new Event('change',{bubbles:true}));
         });
-        // fallback trigger label
-        if (!trigger.textContent || trigger.textContent.trim()==='') {
-          const sopt = sel.options[sel.selectedIndex];
-          trigger.textContent = sopt ? sopt.textContent : 'Selecionar';
-        }
-        // toggle open
-        trigger.addEventListener('click', () => block.classList.toggle('open'));
-        trigger.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); block.classList.toggle('open'); }
-          if (e.key === 'Escape') block.classList.remove('open');
-        });
-        // close outside
-        document.addEventListener('click', (ev) => { if (!block.contains(ev.target)) block.classList.remove('open'); });
+        d.addEventListener('keydown',(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); d.click(); }});
+        optionsContainer.appendChild(d);
       });
-    })();
+      if(!trigger.textContent||trigger.textContent.trim()===''){
+        const sopt = sel.options[sel.selectedIndex];
+        trigger.textContent = sopt ? sopt.textContent : 'Selecionar';
+      }
+      trigger.addEventListener('click',()=>block.classList.toggle('open'));
+      trigger.addEventListener('keydown',(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); block.classList.toggle('open'); } if(e.key==='Escape') block.classList.remove('open');});
+      document.addEventListener('click',(ev)=>{ if(!block.contains(ev.target)) block.classList.remove('open'); });
+    });
+  })();
   </script>
 
-  <!-- ===== main logic (cálculos, salvar, copiar, modal) ===== -->
+  <!-- main logic + drawer behavior -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const $ = id => document.getElementById(id);
-      // inputs
-      const weightEl = $('weight'), heightEl = $('height'), ageEl = $('age');
-      const genderEl = $('gender'), activityEl = $('activity'), goalEl = $('goal'), proteinStrategyEl = $('proteinStrategy');
+  document.addEventListener('DOMContentLoaded', () => {
+    const $ = id => document.getElementById(id);
+    // inputs
+    const weightEl = $('weight'), heightEl = $('height'), ageEl = $('age');
+    const genderEl = $('gender'), activityEl = $('activity'), goalEl = $('goal'), proteinStrategyEl = $('proteinStrategy');
+    // outputs
+    const bmrVal = $('bmrVal'), tdeeVal = $('tdeeVal'), waterVal = $('waterVal');
+    const bmrFriendly = $('bmrFriendly'), tdeeFriendly = $('tdeeFriendly'), waterFriendly = $('waterFriendly');
+    const proteinVal = $('proteinVal'), proteinNote = $('proteinNote'), proteinFriendly = $('proteinFriendly');
+    const creaLoad = $('creaLoad'), creaFixed = $('creaFixed'), creaFriendly = $('creaFriendly');
+    const brief = $('brief');
+    // buttons
+    const calcBtn = $('calcBtn'), resetBtn = $('resetBtn'), copyBtn = $('copyBtn'), saveBtn = $('saveBtn');
+    // drawer elements
+    const openDrawer = document.getElementById('openDrawer');
+    const drawer = document.getElementById('drawer');
+    const drawerBackdrop = document.getElementById('drawerBackdrop');
+    const closeDrawer = document.getElementById('closeDrawer');
+    const creaInfoBtn = document.getElementById('creaInfoBtn');
 
-      // outputs
-      const bmrVal = $('bmrVal'), tdeeVal = $('tdeeVal'), waterVal = $('waterVal');
-      const bmrFriendly = $('bmrFriendly'), tdeeFriendly = $('tdeeFriendly'), waterFriendly = $('waterFriendly');
-      const proteinVal = $('proteinVal'), proteinNote = $('proteinNote'), proteinFriendly = $('proteinFriendly');
-      const creaLoad = $('creaLoad'), creaFixed = $('creaFixed'), creaFriendly = $('creaFriendly');
-      const brief = $('brief');
+    const activityFactor = {sedentary:1.2, light:1.375, moderate:1.55, active:1.725, very:1.9};
 
-      // buttons
-      const calcBtn = $('calcBtn'), resetBtn = $('resetBtn'), copyBtn = $('copyBtn'), saveBtn = $('saveBtn');
+    function safeNumber(v,f=0){const n=Number(v); return Number.isFinite(n)?n:f;}
+    function calcBMR(w,h,a,g){ const male=10*w+6.25*h-5*a+5; const female=10*w+6.25*h-5*a-161; if(g==='male')return Math.round(male); if(g==='female')return Math.round(female); return Math.round((male+female)/2); }
+    function calcTDEE(bmr,activity,goal){ const factor = activityFactor[activity]||1.55; let tdee = Math.round(bmr*factor); if(goal==='loss') tdee = Math.max(1100, tdee-300); if(goal==='gain') tdee = tdee+300; return tdee; }
+    function waterMlRule(w,kcal){const byWeight=35*w; const byKcal=kcal; return Math.round(Math.max(byWeight,byKcal));}
+    function proteinG(w,strat){ let f=1.4; if(strat==='active') f=1.6; if(strat==='athlete') f=1.8; return Math.round(f*w*10)/10; }
+    function creatineValues(w){ const loading = Math.round(0.3*w*10)/10; const maintKg = Math.round(0.03*w*10)/10; const fixed = maintKg<3?3:Math.round(maintKg*10)/10; return {loading, maintKg, fixed}; }
+    function friendlyWaterDisplay(ml){ if(ml>=1000){ const L=ml/1000; return Number.isInteger(L)? `${L} L` : `${L.toFixed(1)} L`; } return `${ml} ml`; }
+    function setText(el,t){ if(el) el.textContent = t; }
+    function setValue(el,num,unit=''){ if(!el) return; if(num===null||num===undefined||num==='—'){ el.textContent = '—' + (unit?(' '+unit):''); return; } el.textContent = `${num}${unit?(' '+unit):''}`; }
+    function buildSummary(o){ const waterFriendly = friendlyWaterDisplay(o.water); return `BMR: ${o.bmr} kcal | TDEE: ${o.tdee} kcal | Água: ${waterFriendly} | Proteína: ${o.protein} g | Creatina: ${o.crea.fixed} g`; }
 
-      // modal controls
-      const openInfo = document.getElementById('openInfo');
-      const infoModal = document.getElementById('infoModal');
-      const closeInfo = document.getElementById('closeInfo');
-      const creaInfo = document.getElementById('creaInfo');
+    function calculateAndRender(){
+      const w = safeNumber(weightEl.value); const h = safeNumber(heightEl.value); const a = safeNumber(ageEl.value);
+      const g = genderEl.value; const activity = activityEl.value; const goal = goalEl.value; const proteinStrategy = proteinStrategyEl.value;
+      if(w<=0||h<=0||a<=0){ alert('Preencha peso, altura e idade com valores válidos.'); return; }
+      const bmr = calcBMR(w,h,a,g); const tdee = calcTDEE(bmr,activity,goal); const water = waterMlRule(w,tdee);
+      const protein = proteinG(w,proteinStrategy); const crea = creatineValues(w);
+      setValue(bmrVal,bmr,'kcal'); setValue(tdeeVal,tdee,'kcal');
+      if(water>=1000){ const L = water/1000; setValue(waterVal, Number.isInteger(L)?L:L.toFixed(1),'L'); } else setValue(waterVal,water,'ml');
+      setValue(proteinVal,protein,'g'); setValue(creaLoad,crea.loading,'g'); setValue(creaFixed,crea.fixed,'g');
+      setText(bmrFriendly,`Gasto basal: ${bmr} kcal/dia`); setText(tdeeFriendly,`Estimativa p/ objetivo: ${tdee} kcal/dia`);
+      setText(waterFriendly,`Recomendado: ${friendlyWaterDisplay(water)} por dia`);
+      setText(proteinNote,`${(protein/w).toFixed(2)} g/kg — estratégia: ${proteinStrategy}`); setText(proteinFriendly,`Total: ${protein} g/dia`);
+      setText(creaFriendly,`Manutenção: ${crea.fixed} g/dia — carga: ${crea.loading} g/dia`);
+      const out = {bmr,tdee,water,protein,crea}; brief.textContent = buildSummary(out); window.__lastCalc = out;
+    }
 
-      const activityFactor = { sedentary:1.2, light:1.375, moderate:1.55, active:1.725, very:1.9 };
-
-      function safeNumber(v, fallback=0) { const n = Number(v); return Number.isFinite(n) ? n : fallback; }
-      function calcBMR(w,h,a,g){ const male = 10*w + 6.25*h - 5*a + 5; const female = 10*w + 6.25*h - 5*a - 161; if (g === 'male') return Math.round(male); if (g === 'female') return Math.round(female); return Math.round((male + female)/2); }
-      function calcTDEE(bmr, activityKey, goal) { const factor = activityFactor[activityKey] || 1.55; let tdee = Math.round(bmr * factor); if (goal === 'loss') tdee = Math.max(1100, tdee - 300); if (goal === 'gain') tdee = tdee + 300; return tdee; }
-      function waterMlRule(w, kcal) { const byWeight = 35 * w; const byKcal = kcal; return Math.round(Math.max(byWeight, byKcal)); }
-      function proteinG(w, strategy) { let factor = 1.4; if (strategy === 'standard') factor = 1.4; if (strategy === 'active') factor = 1.6; if (strategy === 'athlete') factor = 1.8; return Math.round(factor * w * 10) / 10; }
-      function creatineValues(w){ const loading = Math.round(0.3 * w * 10) / 10; const maintKg = Math.round(0.03 * w * 10) / 10; const fixed = maintKg < 3 ? 3 : Math.round(maintKg * 10) / 10; return { loading, maintKg, fixed }; }
-      function friendlyWaterDisplay(ml) { if (ml >= 1000) { const liters = ml / 1000; return Number.isInteger(liters) ? `${liters} L` : `${liters.toFixed(1)} L`; } return `${ml} ml`; }
-      function setText(el, text){ if(el) el.textContent = text; }
-      function setValue(el, number, unit=''){ if(!el) return; if(number === null || number === undefined || number === '—'){ el.textContent = '—' + (unit ? (' ' + unit) : ''); return; } el.textContent = `${number}${unit ? (' ' + unit) : ''}`; }
-      function buildSummary(o){ const waterFriendly = friendlyWaterDisplay(o.water); return `BMR: ${o.bmr} kcal | TDEE: ${o.tdee} kcal | Água: ${waterFriendly} | Proteína: ${o.protein} g | Creatina: ${o.crea.fixed} g`; }
-
-      function calculateAndRender(){
-        const w = safeNumber(weightEl.value); const h = safeNumber(heightEl.value); const a = safeNumber(ageEl.value);
-        const g = genderEl.value; const activity = activityEl.value; const goal = goalEl.value; const proteinStrategy = proteinStrategyEl.value;
-        if (w <= 0 || h <= 0 || a <= 0) { alert('Preencha peso, altura e idade com valores válidos.'); return; }
-        const bmr = calcBMR(w,h,a,g); const tdee = calcTDEE(bmr, activity, goal); const water = waterMlRule(w, tdee);
-        const protein = proteinG(w, proteinStrategy); const crea = creatineValues(w);
-        setValue(bmrVal, bmr, ' kcal'); setValue(tdeeVal, tdee, ' kcal');
-        if(water >= 1000){ const L = water / 1000; setValue(waterVal, Number.isInteger(L) ? L : L.toFixed(1), ' L'); } else { setValue(waterVal, water, ' ml'); }
-        setValue(proteinVal, protein, ' g'); setValue(creaLoad, crea.loading, ' g'); setValue(creaFixed, crea.fixed, ' g');
-        setText(bmrFriendly, `Gasto basal: ${bmr} kcal/dia`); setText(tdeeFriendly, `Estimativa p/ objetivo: ${tdee} kcal/dia`);
-        setText(waterFriendly, `Recomendado: ${friendlyWaterDisplay(water)} por dia`);
-        setText(proteinNote, `${(protein / w).toFixed(2)} g/kg — estratégia: ${proteinStrategy}`); setText(proteinFriendly, `Total: ${protein} g/dia`);
-        setText(creaFriendly, `Manutenção: ${crea.fixed} g/dia — carga: ${crea.loading} g/dia`);
-        const out = { bmr, tdee, water, protein, crea }; brief.textContent = buildSummary(out); window.__lastCalc = out;
-      }
-
-      // events
-      calcBtn.addEventListener('click', calculateAndRender);
-      resetBtn.addEventListener('click', () => {
-        weightEl.value = 70; heightEl.value = 175; ageEl.value = 30;
-        genderEl.value = 'male'; activityEl.value = 'moderate'; goalEl.value = 'maintenance'; proteinStrategyEl.value = 'standard';
-        setText(bmrFriendly, '—'); setText(tdeeFriendly,'—'); setText(waterFriendly,'—');
-        setValue(bmrVal, '—'); setValue(tdeeVal,'—'); setValue(waterVal,'—');
-        setValue(proteinVal, '—', ' g'); setValue(creaLoad, '—', ' g'); setValue(creaFixed, '—', ' g');
-        brief.textContent = 'Clique em Calcular para ver o resumo.'; window.__lastCalc = null;
-      });
-
-      copyBtn.addEventListener('click', () => {
-        if(!window.__lastCalc){ alert('Faça um cálculo primeiro.'); return; }
-        const txt = buildSummary(window.__lastCalc);
-        try { if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt); else { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } copyBtn.textContent = 'Copiado ✓'; setTimeout(()=> copyBtn.textContent = 'Copiar', 1200); } catch(e) { alert('Não foi possível copiar automaticamente.'); }
-      });
-
-      saveBtn.addEventListener('click', () => {
-        const payload = { weight: weightEl.value, height: heightEl.value, age: ageEl.value, gender: genderEl.value, activity: activityEl.value, goal: goalEl.value, proteinStrategy: proteinStrategyEl.value, lastCalc: window.__lastCalc || null };
-        localStorage.setItem('painel_vital_final', JSON.stringify(payload)); saveBtn.textContent = 'Salvo ✓'; setTimeout(()=> saveBtn.textContent = 'Salvar', 1200);
-      });
-
-      // modal controls
-      function openModal(){ infoModal.classList.add('open'); infoModal.setAttribute('aria-hidden','false'); document.body.style.overflow = 'hidden'; }
-      function closeModal(){ infoModal.classList.remove('open'); infoModal.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; }
-
-      openInfo.addEventListener('click', openModal);
-      closeInfo.addEventListener('click', closeModal);
-      creaInfo.addEventListener('click', openModal);
-      // close modal when clicking outside modal content
-      infoModal.addEventListener('click', (e) => { if (e.target === infoModal) closeModal(); });
-
-      // load saved
-      try{ const s = localStorage.getItem('painel_vital_final'); if(s){ const p = JSON.parse(s); if(p.weight) weightEl.value = p.weight; if(p.height) heightEl.value = p.height; if(p.age) ageEl.value = p.age; if(p.gender) genderEl.value = p.gender; if(p.activity) activityEl.value = p.activity; if(p.goal) goalEl.value = p.goal; if(p.proteinStrategy) proteinStrategyEl.value = p.proteinStrategy; if(p.lastCalc) { window.__lastCalc = p.lastCalc; brief.textContent = buildSummary(p.lastCalc); } } }catch(e){}
-
-      // initial run
-      calculateAndRender();
+    calcBtn.addEventListener('click', calculateAndRender);
+    resetBtn.addEventListener('click', () => {
+      weightEl.value = 70; heightEl.value = 175; ageEl.value = 30;
+      genderEl.value = 'male'; activityEl.value = 'moderate'; goalEl.value = 'maintenance'; proteinStrategyEl.value = 'standard';
+      setText(bmrFriendly,'—'); setText(tdeeFriendly,'—'); setText(waterFriendly,'—');
+      setValue(bmrVal,'—'); setValue(tdeeVal,'—'); setValue(waterVal,'—');
+      setValue(proteinVal,'—','g'); setValue(creaLoad,'—','g'); setValue(creaFixed,'—','g');
+      brief.textContent = 'Clique em Calcular para ver o resumo.'; window.__lastCalc = null;
     });
+
+    copyBtn.addEventListener('click', () => {
+      if(!window.__lastCalc){ alert('Faça um cálculo primeiro.'); return; }
+      const txt = buildSummary(window.__lastCalc);
+      try{ if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(txt); else { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } copyBtn.textContent = 'Copiado ✓'; setTimeout(()=> copyBtn.textContent='Copiar',1200); } catch(e){ alert('Não foi possível copiar automaticamente.'); }
+    });
+
+    saveBtn.addEventListener('click', () => {
+      const payload = {weight:weightEl.value,height:heightEl.value,age:ageEl.value,gender:genderEl.value,activity:activityEl.value,goal:goalEl.value,proteinStrategy:proteinStrategyEl.value,lastCalc:window.__lastCalc||null};
+      localStorage.setItem('painel_vital_final', JSON.stringify(payload)); saveBtn.textContent='Salvo ✓'; setTimeout(()=> saveBtn.textContent='Salvar',1200);
+    });
+
+    // drawer controls
+    function openDrawerFn(){ drawer.classList.add('open'); drawerBackdrop.classList.add('open'); drawer.setAttribute('aria-hidden','false'); drawerBackdrop.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeDrawerFn(){ drawer.classList.remove('open'); drawerBackdrop.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); drawerBackdrop.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    document.getElementById('openDrawer').addEventListener('click', openDrawerFn);
+    closeDrawer.addEventListener('click', closeDrawerFn);
+    drawerBackdrop.addEventListener('click', closeDrawerFn);
+    creaInfoBtn.addEventListener('click', () => { openDrawerFn(); // open and switch to creatina
+      setTimeout(()=> activateTab('creatina'), 260);
+    });
+
+    // tab logic
+    const tabs = Array.from(document.querySelectorAll('.drawer .tab'));
+    function activateTab(name){
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.tab===name));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.style.display = panel.id === 'tab-'+name ? 'block' : 'none');
+    }
+    tabs.forEach(t => t.addEventListener('click', ()=> activateTab(t.dataset.tab)));
+
+    // load saved
+    try{
+      const s = localStorage.getItem('painel_vital_final');
+      if(s){ const p = JSON.parse(s); if(p.weight) weightEl.value = p.weight; if(p.height) heightEl.value = p.height; if(p.age) ageEl.value = p.age; if(p.gender) genderEl.value = p.gender; if(p.activity) activityEl.value = p.activity; if(p.goal) goalEl.value = p.goal; if(p.proteinStrategy) proteinStrategyEl.value = p.proteinStrategy; if(p.lastCalc){ window.__lastCalc=p.lastCalc; brief.textContent = buildSummary(p.lastCalc);} }
+    }catch(e){/* ignore */ }
+
+    // initial render
+    calculateAndRender();
+  });
   </script>
 </body>
 </html>
