@@ -344,6 +344,7 @@
           optionsContainer.querySelectorAll('.custom-option').forEach(x => x.removeAttribute('aria-selected'));
           d.setAttribute('aria-selected','true');
           block.classList.remove('open');
+          // dispatch native change so our main logic picks it up
           sel.dispatchEvent(new Event('change',{bubbles:true}));
         });
         d.addEventListener('keydown',(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); d.click(); }});
@@ -356,6 +357,12 @@
       trigger.addEventListener('click',()=>block.classList.toggle('open'));
       trigger.addEventListener('keydown',(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); block.classList.toggle('open'); } if(e.key==='Escape') block.classList.remove('open');});
       document.addEventListener('click',(ev)=>{ if(!block.contains(ev.target)) block.classList.remove('open'); });
+
+      // ensure when the underlying select changes (e.g. via code), trigger text updates
+      sel.addEventListener('change', () => {
+        const sopt = sel.options[sel.selectedIndex];
+        trigger.textContent = sopt ? sopt.textContent : sel.value;
+      });
     });
   })();
   </script>
@@ -393,12 +400,37 @@
     function setValue(el,num,unit=''){ if(!el) return; if(num===null||num===undefined||num==='—'){ el.textContent = '—' + (unit?(' '+unit):''); return; } el.textContent = `${num}${unit?(' '+unit):''}`; }
     function buildSummary(o){ const waterFriendly = friendlyWaterDisplay(o.water); return `BMR: ${o.bmr} kcal | TDEE: ${o.tdee} kcal | Água: ${waterFriendly} | Proteína: ${o.protein} g | Creatina: ${o.crea.fixed} g`; }
 
+    // Debounce mechanism: automatic calc on input/select change
+    let calcTimer = null;
+    function scheduleCalc(short=false){
+      // if short === true, run immediately (used for select changes)
+      if(short){
+        clearTimeout(calcTimer);
+        calculateAndRender();
+        return;
+      }
+      // else show updating and debounce
+      clearTimeout(calcTimer);
+      brief.textContent = 'Atualizando...';
+      calcTimer = setTimeout(()=> {
+        calculateAndRender();
+      }, 300);
+    }
+
     function calculateAndRender(){
       const w = safeNumber(weightEl.value); const h = safeNumber(heightEl.value); const a = safeNumber(ageEl.value);
       const g = genderEl.value; const activity = activityEl.value; const goal = goalEl.value; const proteinStrategy = proteinStrategyEl.value;
-      if(w<=0||h<=0||a<=0){ alert('Preencha peso, altura e idade com valores válidos.'); return; }
+      if(w<=0||h<=0||a<=0){
+        // do not alert on every change — show friendly prompt
+        setText(bmrVal,'— kcal'); setText(tdeeVal,'— kcal'); setText(waterVal,'—'); setText(proteinVal,'— g');
+        setText(creaLoad,'— g'); setText(creaFixed,'— g');
+        brief.textContent = 'Preencha peso, altura e idade com valores válidos.';
+        window.__lastCalc = null;
+        return;
+      }
       const bmr = calcBMR(w,h,a,g); const tdee = calcTDEE(bmr,activity,goal); const water = waterMlRule(w,tdee);
       const protein = proteinG(w,proteinStrategy); const crea = creatineValues(w);
+      // format values: keep whitespace/no-wrap by CSS
       setValue(bmrVal,bmr,'kcal'); setValue(tdeeVal,tdee,'kcal');
       if(water>=1000){ const L = water/1000; setValue(waterVal, Number.isInteger(L)?L:L.toFixed(1),'L'); } else setValue(waterVal,water,'ml');
       setValue(proteinVal,protein,'g'); setValue(creaLoad,crea.loading,'g'); setValue(creaFixed,crea.fixed,'g');
@@ -409,6 +441,18 @@
       const out = {bmr,tdee,water,protein,crea}; brief.textContent = buildSummary(out); window.__lastCalc = out;
     }
 
+    // Attach automatic listeners
+    // inputs: debounce typing
+    [weightEl, heightEl, ageEl].forEach(el => {
+      el.addEventListener('input', ()=> scheduleCalc(false));
+      el.addEventListener('change', ()=> scheduleCalc(true));
+    });
+    // selects: when underlying <select> changes (custom-select dispatches change), run immediately
+    [genderEl, activityEl, goalEl, proteinStrategyEl].forEach(sel => {
+      sel.addEventListener('change', ()=> scheduleCalc(true));
+    });
+
+    // existing buttons
     calcBtn.addEventListener('click', calculateAndRender);
     resetBtn.addEventListener('click', () => {
       weightEl.value = 70; heightEl.value = 175; ageEl.value = 30;
