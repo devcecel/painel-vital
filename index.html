@@ -23,7 +23,7 @@
     padding-left: 16px; padding-right: 16px; display:flex; align-items:flex-start; justify-content:center;
   }
 
-  .wrap{width:100%; max-width:1100px; margin:0 auto; padding-bottom:72px;} /* espaço para botão inferior */
+  .wrap{width:100%; max-width:1100px; margin:0 auto; /* sem padding-bottom aqui - botão fora */ }
 
   /* header */
   .topbar{
@@ -74,9 +74,9 @@
   select.native-hidden{display:none !important;}
 
   /* drawer / info menu */
-  .drawer-backdrop{position:fixed;inset:0;background:rgba(2,6,15,0.45);display:none;z-index:130;}
+  .drawer-backdrop{position:fixed;inset:0;background:rgba(2,6,15,0.45);display:none;z-index:9990;}
   .drawer-backdrop.open{display:block;}
-  .drawer{position:fixed;right:0;top:0;height:100%;width:360px;max-width:92vw;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:-20px 0 40px rgba(2,8,20,0.6);padding:18px;border-left:1px solid rgba(255,255,255,0.04);transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.9,.3,1);overflow:auto;}
+  .drawer{position:fixed;right:0;top:0;height:100%;width:360px;max-width:92vw;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:-20px 0 40px rgba(2,8,20,0.6);padding:18px;border-left:1px solid rgba(255,255,255,0.04);transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.9,.3,1);overflow:auto;z-index:9992;}
   .drawer.open{transform:translateX(0);}
   .drawer h3{margin:0 0 8px 0;font-size:1.05rem;}
   .drawer .close-drawer{position:absolute;left:12px;top:12px;background:transparent;border:none;color:#e6eef8;font-weight:800;cursor:pointer;}
@@ -86,13 +86,13 @@
   .drawer .content p{margin:8px 0;color:rgba(230,238,248,0.95);line-height:1.35;font-size:0.95rem;}
   .drawer .bullet{margin-left:14px;margin-bottom:6px;color:rgba(230,238,248,0.95);}
 
-  /* bottom info button (bonitinho) */
+  /* BOTÃO FIXO PARA MOBILE (sempre visível) */
   .info-bottom {
     position:fixed;
     left:50%;
     transform:translateX(-50%);
-    bottom:18px;
-    z-index:140;
+    bottom: calc(env(safe-area-inset-bottom, 12px) + 12px);
+    z-index:99999; /* muito alto para não ser coberto */
     background:linear-gradient(90deg,var(--accent),var(--accent-2));
     color:#022;
     padding:12px 18px;
@@ -104,10 +104,12 @@
     align-items:center;
     border: none;
     cursor: pointer;
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* touch */
+    touch-action: manipulation;
   }
   .info-bottom svg { width:18px; height:18px; }
 
-  @media(max-width:420px){ .info-bottom{bottom:12px;padding:10px 14px;} .wrap{padding-bottom:92px;} }
+  @media(max-width:420px){ .info-bottom{bottom: calc(env(safe-area-inset-bottom, 8px) + 10px);padding:10px 14px;} }
 </style>
 </head>
 <body>
@@ -124,8 +126,6 @@
         <div class="title">Painel Vital</div>
         <div class="subtitle">Resultados simples — L, g, kcal</div>
       </div>
-
-      <!-- header intentionally left without info button (as you requested) -->
     </header>
 
     <main class="grid-main" role="region" aria-label="Ferramentas e resultados">
@@ -316,9 +316,8 @@
     </div>
   </aside>
 
-  <!-- BOTÃO BONITINHO NO FINAL -->
-  <button id="infoBottomBtn" class="info-bottom" title="Abrir informações">
-    <!-- ícone info -->
+  <!-- BOTÃO FIXO (fora do wrap e sempre clicável) -->
+  <button id="infoBottomBtn" class="info-bottom" title="Abrir informações" aria-haspopup="true" aria-controls="drawer">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.75 6a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zM11 11h2v6h-2v-6z" fill="#022"/></svg>
     Informações
   </button>
@@ -376,7 +375,7 @@
     const brief = $('brief');
     // buttons
     const calcBtn = $('calcBtn'), resetBtn = $('resetBtn'), copyBtn = $('copyBtn'), saveBtn = $('saveBtn');
-    // drawer elements
+    // drawer controls
     const infoBottomBtn = $('infoBottomBtn');
     const drawer = document.getElementById('drawer');
     const drawerBackdrop = document.getElementById('drawerBackdrop');
@@ -435,6 +434,7 @@
     // drawer controls
     function openDrawerFn(){ drawer.classList.add('open'); drawerBackdrop.classList.add('open'); drawer.setAttribute('aria-hidden','false'); drawerBackdrop.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
     function closeDrawerFn(){ drawer.classList.remove('open'); drawerBackdrop.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); drawerBackdrop.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    // attach listener to fixed button (guaranteed present)
     infoBottomBtn.addEventListener('click', openDrawerFn);
     closeDrawer.addEventListener('click', closeDrawerFn);
     drawerBackdrop.addEventListener('click', closeDrawerFn);
