@@ -23,7 +23,7 @@
     padding-left: 16px; padding-right: 16px; display:flex; align-items:flex-start; justify-content:center;
   }
 
-  .wrap{width:100%; max-width:1100px; margin:0 auto;}
+  .wrap{width:100%; max-width:1100px; margin:0 auto; padding-bottom:72px;} /* espaço para botão inferior */
 
   /* header */
   .topbar{
@@ -34,7 +34,6 @@
   .logo{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));}
   .title{font-weight:800;font-size:1.1rem;}
   .subtitle{color:rgba(230,238,248,0.82);font-size:0.86rem;margin-top:2px;}
-  .info-btn{margin-left:auto;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.04);color:#e6eef8;padding:8px 10px;border-radius:10px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(2,8,20,0.3);}
 
   /* layout */
   .grid-main{display:grid;grid-template-columns:1fr;gap:16px;align-items:start;}
@@ -74,7 +73,7 @@
   .custom-select.open .custom-options{display:block;}
   select.native-hidden{display:none !important;}
 
-  /* drawer / info menu (side panel) */
+  /* drawer / info menu */
   .drawer-backdrop{position:fixed;inset:0;background:rgba(2,6,15,0.45);display:none;z-index:130;}
   .drawer-backdrop.open{display:block;}
   .drawer{position:fixed;right:0;top:0;height:100%;width:360px;max-width:92vw;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:-20px 0 40px rgba(2,8,20,0.6);padding:18px;border-left:1px solid rgba(255,255,255,0.04);transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.9,.3,1);overflow:auto;}
@@ -87,7 +86,28 @@
   .drawer .content p{margin:8px 0;color:rgba(230,238,248,0.95);line-height:1.35;font-size:0.95rem;}
   .drawer .bullet{margin-left:14px;margin-bottom:6px;color:rgba(230,238,248,0.95);}
 
-  @media(max-width:640px){ .drawer{width:92vw;} .drawer .tab{flex:1 1 48%; text-align:center;} }
+  /* bottom info button (bonitinho) */
+  .info-bottom {
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:18px;
+    z-index:140;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#022;
+    padding:12px 18px;
+    border-radius:999px;
+    font-weight:900;
+    box-shadow:0 14px 40px rgba(4,12,30,0.5);
+    display:flex;
+    gap:10px;
+    align-items:center;
+    border: none;
+    cursor: pointer;
+  }
+  .info-bottom svg { width:18px; height:18px; }
+
+  @media(max-width:420px){ .info-bottom{bottom:12px;padding:10px 14px;} .wrap{padding-bottom:92px;} }
 </style>
 </head>
 <body>
@@ -99,12 +119,13 @@
           <path d="M12 7.5l.7-.6C13.8 6 15 5 16.5 5 18.9 5 20 7.9 19 10c-.8 1.7-3.5 4.6-7 7.25C12.5 16.4 10 14.1 8.3 12.9 6.8 11.9 5.1 10 6.2 8.1 7.3 6.1 9.6 6 11 7c.6.4 1 .5 1 .5z" fill="white" fill-opacity="0.06"/>
         </svg>
       </div>
+
       <div>
         <div class="title">Painel Vital</div>
         <div class="subtitle">Resultados simples — L, g, kcal</div>
       </div>
 
-      <button id="openDrawer" class="info-btn" title="Informações">i</button>
+      <!-- header intentionally left without info button (as you requested) -->
     </header>
 
     <main class="grid-main" role="region" aria-label="Ferramentas e resultados">
@@ -233,10 +254,7 @@
           </div>
 
           <div class="card" style="padding:12px;">
-            <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
-              <div style="font-weight:800;">Creatina</div>
-              <button id="creaInfoBtn" class="tiny-info" title="Informação rápida">?</button>
-            </div>
+            <div style="font-weight:800;text-align:center;">Creatina</div>
             <div style="display:flex;gap:12px;justify-content:center;margin-top:6px;">
               <div style="text-align:center;">
                 <div id="creaLoad" style="font-weight:800;">— g</div>
@@ -262,7 +280,7 @@
     </main>
   </div>
 
-  <!-- DRAWER: info menu separado em abas curtas -->
+  <!-- DRAWER: info menu -->
   <div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
   <aside id="drawer" class="drawer" aria-hidden="true" role="complementary" aria-label="Menu de informações">
     <button id="closeDrawer" class="close-drawer" aria-label="Fechar">✕</button>
@@ -276,7 +294,7 @@
 
     <div class="content">
       <div id="tab-creatina" class="tab-panel" role="tabpanel">
-        <p class="bullet"><strong>• Carga (opcional):</strong> 0,3 g/kg por 5–7 dias. Ex.: 70 kg → ~21 g/dia (dividido).</p>
+        <p class="bullet"><strong>• Carga (opcional):</strong> 0,3 g/kg por 5–7 dias. Ex.: 70 kg → ~21 g/dia dividido.</p>
         <p class="bullet"><strong>• Manutenção:</strong> ~0,03 g/kg → prático: 3 g/dia.</p>
         <p class="bullet"><strong>• Quando pular carga:</strong> quer simplicidade → comece direto com 3 g/dia.</p>
         <p class="bullet"><strong>• Precauções:</strong> beba água; consulte médico se tiver problema renal.</p>
@@ -286,17 +304,24 @@
         <p class="bullet"><strong>Perder peso:</strong> diminuir ~300 kcal do TDEE (mín. 1100 kcal) → déficit gradual.</p>
         <p class="bullet"><strong>Manter peso:</strong> usar TDEE estimado → estabilidade.</p>
         <p class="bullet"><strong>Ganar massa:</strong> somar ~300 kcal ao TDEE → superávit; combine com proteína maior.</p>
-        <p class="bullet"><strong>O que muda na prática:</strong> objetivo altera calorias; mantenha proteína alta ao perder para preservar músculo.</p>
+        <p class="bullet"><strong>O que muda:</strong> apenas a meta calórica e pequenas recomendações de proteína/água.</p>
       </div>
 
       <div id="tab-dicas" class="tab-panel" style="display:none">
         <p class="bullet"><strong>• Água:</strong> beba ao longo do dia (ex.: 4 L → distribuir).</p>
         <p class="bullet"><strong>• Proteína:</strong> dividir em 3–4 refeições facilita atingir meta.</p>
-        <p class="bullet"><strong>• Creatina:</strong> consistência importa mais que horário; tomar com água/suco funciona.</p>
-        <p class="bullet"><strong>• Segurança:</strong> valores são estimativas — se tiver dúvida, procure um profissional.</p>
+        <p class="bullet"><strong>• Creatina:</strong> consistência > timing; tomar com água/suco.</p>
+        <p class="bullet"><strong>• Segurança:</strong> são estimativas — consulte um profissional se necessário.</p>
       </div>
     </div>
   </aside>
+
+  <!-- BOTÃO BONITINHO NO FINAL -->
+  <button id="infoBottomBtn" class="info-bottom" title="Abrir informações">
+    <!-- ícone info -->
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.75 6a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zM11 11h2v6h-2v-6z" fill="#022"/></svg>
+    Informações
+  </button>
 
   <!-- custom select script -->
   <script>
@@ -336,7 +361,7 @@
   })();
   </script>
 
-  <!-- main logic + drawer behavior -->
+  <!-- main logic + drawer -->
   <script>
   document.addEventListener('DOMContentLoaded', () => {
     const $ = id => document.getElementById(id);
@@ -352,11 +377,10 @@
     // buttons
     const calcBtn = $('calcBtn'), resetBtn = $('resetBtn'), copyBtn = $('copyBtn'), saveBtn = $('saveBtn');
     // drawer elements
-    const openDrawer = document.getElementById('openDrawer');
+    const infoBottomBtn = $('infoBottomBtn');
     const drawer = document.getElementById('drawer');
     const drawerBackdrop = document.getElementById('drawerBackdrop');
     const closeDrawer = document.getElementById('closeDrawer');
-    const creaInfoBtn = document.getElementById('creaInfoBtn');
 
     const activityFactor = {sedentary:1.2, light:1.375, moderate:1.55, active:1.725, very:1.9};
 
@@ -411,12 +435,9 @@
     // drawer controls
     function openDrawerFn(){ drawer.classList.add('open'); drawerBackdrop.classList.add('open'); drawer.setAttribute('aria-hidden','false'); drawerBackdrop.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
     function closeDrawerFn(){ drawer.classList.remove('open'); drawerBackdrop.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); drawerBackdrop.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
-    document.getElementById('openDrawer').addEventListener('click', openDrawerFn);
+    infoBottomBtn.addEventListener('click', openDrawerFn);
     closeDrawer.addEventListener('click', closeDrawerFn);
     drawerBackdrop.addEventListener('click', closeDrawerFn);
-    creaInfoBtn.addEventListener('click', () => { openDrawerFn(); // open and switch to creatina
-      setTimeout(()=> activateTab('creatina'), 260);
-    });
 
     // tab logic
     const tabs = Array.from(document.querySelectorAll('.drawer .tab'));
