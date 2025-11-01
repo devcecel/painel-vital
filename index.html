@@ -19,28 +19,27 @@
       linear-gradient(180deg,#021025 0%, #06152b 100%);
     color:#e6eef8; -webkit-font-smoothing:antialiased; box-sizing:border-box;
     padding-top: calc(env(safe-area-inset-top, 20px) + 36px);
-    padding-bottom: calc(env(safe-area-inset-bottom, 12px) + 12px);
     padding-left: 16px; padding-right: 16px; display:flex; align-items:flex-start; justify-content:center;
+    /* when drawer open we add .drawer-open to body to hide the fixed button */
   }
 
-  .wrap{width:100%; max-width:1100px; margin:0 auto; /* sem padding-bottom aqui - botão fora */ }
+  /* give large bottom padding so content never gets covered by fixed button */
+  .wrap{width:100%; max-width:1100px; margin:0 auto; padding-bottom:140px;}
 
   /* header */
-  .topbar{
-    display:flex; gap:12px; align-items:center; position:sticky; top:calc(env(safe-area-inset-top,20px)+8px); z-index:90;
+  .topbar{display:flex; gap:12px; align-items:center; position:sticky; top:calc(env(safe-area-inset-top,20px)+8px); z-index:90;
     background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    padding:10px 12px; border-radius:12px; box-shadow:0 10px 30px rgba(2,8,20,0.45); backdrop-filter:blur(6px); margin-bottom:14px;
-  }
+    padding:10px 12px; border-radius:12px; box-shadow:0 10px 30px rgba(2,8,20,0.45); backdrop-filter:blur(6px); margin-bottom:14px;}
   .logo{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));}
   .title{font-weight:800;font-size:1.1rem;}
   .subtitle{color:rgba(230,238,248,0.82);font-size:0.86rem;margin-top:2px;}
 
-  /* layout */
+  /* layout/cards */
   .grid-main{display:grid;grid-template-columns:1fr;gap:16px;align-items:start;}
   @media(min-width:980px){ .grid-main{grid-template-columns:360px 1fr;} }
   .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 12px 36px rgba(2,8,20,0.45);backdrop-filter:blur(6px);}
 
-  /* inputs */
+  /* input styling */
   .input-panel label{display:block;text-align:center;color:var(--muted);margin-bottom:6px;font-size:13px;}
   .input-panel input{width:100%;padding:14px 12px;border-radius:12px;background:rgba(255,255,255,0.02);color:#e6eef8;border:1px solid rgba(255,255,255,0.06);font-weight:700;font-size:16px;text-align:center;}
   .input-row{display:flex;gap:10px;}
@@ -73,10 +72,10 @@
   .custom-select.open .custom-options{display:block;}
   select.native-hidden{display:none !important;}
 
-  /* drawer / info menu */
-  .drawer-backdrop{position:fixed;inset:0;background:rgba(2,6,15,0.45);display:none;z-index:9990;}
+  /* drawer/backdrop: now mostly opaque for readability */
+  .drawer-backdrop{position:fixed;inset:0;background:#021025;opacity:0.98;display:none;z-index:9990;} /* quase sólido */
   .drawer-backdrop.open{display:block;}
-  .drawer{position:fixed;right:0;top:0;height:100%;width:360px;max-width:92vw;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:-20px 0 40px rgba(2,8,20,0.6);padding:18px;border-left:1px solid rgba(255,255,255,0.04);transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.9,.3,1);overflow:auto;z-index:9992;}
+  .drawer{position:fixed;right:0;top:0;height:100%;width:360px;max-width:92vw;background:#021025;box-shadow:-20px 0 40px rgba(2,8,20,0.6);padding:18px;border-left:1px solid rgba(255,255,255,0.04);transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.9,.3,1);overflow:auto;z-index:9992;}
   .drawer.open{transform:translateX(0);}
   .drawer h3{margin:0 0 8px 0;font-size:1.05rem;}
   .drawer .close-drawer{position:absolute;left:12px;top:12px;background:transparent;border:none;color:#e6eef8;font-weight:800;cursor:pointer;}
@@ -86,13 +85,14 @@
   .drawer .content p{margin:8px 0;color:rgba(230,238,248,0.95);line-height:1.35;font-size:0.95rem;}
   .drawer .bullet{margin-left:14px;margin-bottom:6px;color:rgba(230,238,248,0.95);}
 
-  /* BOTÃO FIXO PARA MOBILE (sempre visível) */
+  /* fixed info button (centered at bottom) - visible when drawer closed.
+     body.drawer-open .info-bottom { display:none } will hide it while drawer is open. */
   .info-bottom {
     position:fixed;
     left:50%;
     transform:translateX(-50%);
     bottom: calc(env(safe-area-inset-bottom, 12px) + 12px);
-    z-index:99999; /* muito alto para não ser coberto */
+    z-index:99999;
     background:linear-gradient(90deg,var(--accent),var(--accent-2));
     color:#022;
     padding:12px 18px;
@@ -104,10 +104,10 @@
     align-items:center;
     border: none;
     cursor: pointer;
-    -webkit-tap-highlight-color: rgba(0,0,0,0); /* touch */
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
     touch-action: manipulation;
   }
-  .info-bottom svg { width:18px; height:18px; }
+  body.drawer-open .info-bottom{ display:none; } /* hide button while drawer is open */
 
   @media(max-width:420px){ .info-bottom{bottom: calc(env(safe-area-inset-bottom, 8px) + 10px);padding:10px 14px;} }
 </style>
@@ -280,7 +280,7 @@
     </main>
   </div>
 
-  <!-- DRAWER: info menu -->
+  <!-- Drawer + solid backdrop -->
   <div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
   <aside id="drawer" class="drawer" aria-hidden="true" role="complementary" aria-label="Menu de informações">
     <button id="closeDrawer" class="close-drawer" aria-label="Fechar">✕</button>
@@ -316,13 +316,13 @@
     </div>
   </aside>
 
-  <!-- BOTÃO FIXO (fora do wrap e sempre clicável) -->
+  <!-- FIXED BUTTON (outside wrap, always clickable). Hidden automatically when drawer opens. -->
   <button id="infoBottomBtn" class="info-bottom" title="Abrir informações" aria-haspopup="true" aria-controls="drawer">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.75 6a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zM11 11h2v6h-2v-6z" fill="#022"/></svg>
     Informações
   </button>
 
-  <!-- custom select script -->
+  <!-- scripts -->
   <script>
   (function initCustomSelects(){
     const blocks = Array.from(document.querySelectorAll('.custom-select'));
@@ -360,7 +360,6 @@
   })();
   </script>
 
-  <!-- main logic + drawer -->
   <script>
   document.addEventListener('DOMContentLoaded', () => {
     const $ = id => document.getElementById(id);
@@ -431,15 +430,28 @@
       localStorage.setItem('painel_vital_final', JSON.stringify(payload)); saveBtn.textContent='Salvo ✓'; setTimeout(()=> saveBtn.textContent='Salvar',1200);
     });
 
-    // drawer controls
-    function openDrawerFn(){ drawer.classList.add('open'); drawerBackdrop.classList.add('open'); drawer.setAttribute('aria-hidden','false'); drawerBackdrop.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
-    function closeDrawerFn(){ drawer.classList.remove('open'); drawerBackdrop.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); drawerBackdrop.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
-    // attach listener to fixed button (guaranteed present)
+    // drawer controls: ensure button always works and hides when drawer open
+    function openDrawerFn(){
+      drawer.classList.add('open');
+      drawerBackdrop.classList.add('open');
+      drawer.setAttribute('aria-hidden','false');
+      drawerBackdrop.setAttribute('aria-hidden','false');
+      document.body.classList.add('drawer-open'); // hides fixed button
+      document.body.style.overflow='hidden';
+    }
+    function closeDrawerFn(){
+      drawer.classList.remove('open');
+      drawerBackdrop.classList.remove('open');
+      drawer.setAttribute('aria-hidden','true');
+      drawerBackdrop.setAttribute('aria-hidden','true');
+      document.body.classList.remove('drawer-open');
+      document.body.style.overflow='';
+    }
     infoBottomBtn.addEventListener('click', openDrawerFn);
     closeDrawer.addEventListener('click', closeDrawerFn);
     drawerBackdrop.addEventListener('click', closeDrawerFn);
 
-    // tab logic
+    // tabs
     const tabs = Array.from(document.querySelectorAll('.drawer .tab'));
     function activateTab(name){
       tabs.forEach(t => t.classList.toggle('active', t.dataset.tab===name));
@@ -453,7 +465,7 @@
       if(s){ const p = JSON.parse(s); if(p.weight) weightEl.value = p.weight; if(p.height) heightEl.value = p.height; if(p.age) ageEl.value = p.age; if(p.gender) genderEl.value = p.gender; if(p.activity) activityEl.value = p.activity; if(p.goal) goalEl.value = p.goal; if(p.proteinStrategy) proteinStrategyEl.value = p.proteinStrategy; if(p.lastCalc){ window.__lastCalc=p.lastCalc; brief.textContent = buildSummary(p.lastCalc);} }
     }catch(e){/* ignore */ }
 
-    // initial render
+    // initial
     calculateAndRender();
   });
   </script>
